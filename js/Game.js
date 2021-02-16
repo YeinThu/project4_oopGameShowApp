@@ -5,7 +5,13 @@
 class Game {
   constructor() {
     this.missed = 0;
-    this.phrases = ['incredible', 'up up and away', 'wake me up', 'shine bright', 'speedy'];
+    this.phrases = [
+      new Phrase('incredible'), 
+      new Phrase('up up and away'), 
+      new Phrase('wake me up'), 
+      new Phrase('shine bright'), 
+      new Phrase('speedy')
+    ];
     this.activePhrase = null;
   }
 
@@ -19,8 +25,7 @@ class Game {
     this.activePhrase = randomPhrase;
 
     // Instantiate Phrase Object & Add Phrase To Display
-    const phrase = new Phrase(this.activePhrase);
-    phrase.addPhraseToDisplay();
+    this.activePhrase.addPhraseToDisplay();
 
   }
 
@@ -35,38 +40,35 @@ class Game {
     // Check If Active Phrase Contains Letter
     const letter = userGuess.textContent;
 
-    // Instantiate Phrase & Call Check Letter
-    const phrase = new Phrase(this.activePhrase);
-
     // Letter Guess Status
-    const letterStatus = phrase.checkLetter(letter, userGuess);
-
+    const letterStatus = this.activePhrase.checkLetter(letter, userGuess);
+    
     if (!letterStatus) {
       this.removeLife();
     }
     else {
-      phrase.showMatchedLetter(letter);
+      this.activePhrase.showMatchedLetter(letter);
+      this.checkForWin();
     }
 
-    // Call Check Win
-    this.checkForWin();
   }
 
   removeLife() {
     // Increment Missed Guesses
     this.missed++;
     
-    // Replace Full Hearts With Empty Heart
+    // // Replace Full Hearts With Empty Heart
     hearts[hearts.length - this.missed].setAttribute('src', '../images/lostHeart.png');
+
+    if (this.missed >= 5) {
+      this.gameOver('Sorry, try again next time!', 'lose');
+    }
   }
 
   checkForWin() {
     const hiddenLetters = document.querySelectorAll('#phrase .hide');
 
-    if (this.missed >= 5) {
-      this.gameOver('Sorry, try again next time!', 'lose');
-    }
-    else if (hiddenLetters.length === 0) {
+    if (hiddenLetters.length === 0) {
       this.gameOver('You win!', 'win');
     }
   }
@@ -84,8 +86,7 @@ class Game {
     resetBtn.parentElement.className = status;
 
     // Reset Game
-    game.resetGame();
-
+    this.resetGame();
   }
 
   resetGame() {
@@ -93,7 +94,11 @@ class Game {
       button.disabled = false;
       button.className = 'key';
     });
-  
+   
+    this.missed = 0;
+
+    phrase.innerHTML = '';
+
     hearts.forEach(heart => heart.setAttribute('src', '../images/liveHeart.png'));
   }
 }
