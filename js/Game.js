@@ -17,88 +17,87 @@ class Game {
 
   startGame() {
     // Hide Overlay
-    const overlay = document.querySelector('#overlay');
     overlay.style.display = 'none';
 
-    // Get Random Phrase & Set Active Phrase
-    const randomPhrase = this.getRandomPhrase();
-    this.activePhrase = randomPhrase;
+    // Get Random Phrase & Set As Active Phrase
+    this.activePhrase = this.getRandomPhrase();
 
-    // Instantiate Phrase Object & Add Phrase To Display
+    // Call 'addPhraseToDisplay()'
     this.activePhrase.addPhraseToDisplay();
-
+    console.log(this.activePhrase);
   }
 
   getRandomPhrase() {
     return this.phrases[Math.floor(Math.random() * this.phrases.length)];
   }
 
-  handleInteraction(userGuess) {
-    // Disable Key
-    userGuess.disabled = true;
+  handleInteraction(userButton) {
+    // Disable Selected Button
+    userButton.disabled = true;
 
-    // Check If Active Phrase Contains Letter
-    const letter = userGuess.textContent;
-
-    // Letter Guess Status
-    const letterStatus = this.activePhrase.checkLetter(letter, userGuess);
-    
+    // Check Letter Status
+    const letterStatus = this.activePhrase.checkLetter(userButton);
+  
+    // Actions Based On Letter Status
     if (!letterStatus) {
+      userButton.classList.add('wrong');
       this.removeLife();
     }
     else {
-      this.activePhrase.showMatchedLetter(letter);
-      this.checkForWin();
-    }
+      userButton.classList.add('chosen');
+      this.activePhrase.showMatchedLetter(userButton.textContent);
+      const hasWon = this.checkForWin();
 
+      // If User Has Won, Call Game Over
+      if (hasWon) this.gameOver('You win!', 'win');
+    }
   }
 
   removeLife() {
     // Increment Missed Guesses
     this.missed++;
-    
-    // // Replace Full Hearts With Empty Heart
+
+    // Replace Full Hearts With Empty Heart
     hearts[hearts.length - this.missed].setAttribute('src', '../images/lostHeart.png');
 
+    // Check To See If All Hearts Are Out / Call Game Over
     if (this.missed >= 5) {
-      this.gameOver('Sorry, try again next time!', 'lose');
+      this.gameOver('Sory, try again next time!', 'lose');
     }
   }
 
   checkForWin() {
-    const hiddenLetters = document.querySelectorAll('#phrase .hide');
-
-    if (hiddenLetters.length === 0) {
-      this.gameOver('You win!', 'win');
-    }
+    const hiddenLetters = phraseOnBoard.querySelectorAll('.hide');
+    
+    return hiddenLetters.length === 0 ? true : false;
   }
 
   gameOver(message, status) {
-    // Set Text For Play Again Button
-    const resetBtn = document.querySelector('#btn__reset');
-    resetBtn.textContent = 'Play Again';
+    // Display Overlay
+    overlay.style.display = 'flex';
+    overlay.className = status;
 
     // Set Text For Message
-    resetBtn.previousElementSibling.textContent = message;
+    overlay.querySelector('#game-over-message').textContent = message;
 
-    // Display Overlay
-    resetBtn.parentElement.style.display = 'flex';
-    resetBtn.parentElement.className = status;
+    // Set Text For 'Play Again' Button
+    overlay.querySelector('#btn__reset').textContent = 'Play Again';
 
     // Reset Game
-    this.resetGame();
-  }
+    // Remove Shown Letters On Board
+    phraseOnBoard.innerHTML = '';
 
-  resetGame() {
+    // Enable All Keyboard Buttons & Reset Their Class
     qwerty.forEach(button => {
       button.disabled = false;
       button.className = 'key';
     });
-   
+
+    // Refill Hearts
+    hearts.forEach(heart => heart.setAttribute('src', '../images/liveHeart.png'));
+
+    // Reset Missed Guess To 0
     this.missed = 0;
 
-    phrase.innerHTML = '';
-
-    hearts.forEach(heart => heart.setAttribute('src', '../images/liveHeart.png'));
   }
 }

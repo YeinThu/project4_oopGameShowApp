@@ -11,8 +11,7 @@ class Phrase {
     // Split Phrase Into Letters & Words
     const splitPhrase = this.phrase.split('');
 
-    // Display Phrase
-    const ul = document.querySelector('#phrase ul');
+    // Display Phrase On Board
     let html = '';
 
     splitPhrase.forEach(character => {
@@ -26,30 +25,25 @@ class Phrase {
           <li class="hide letter ${character}">${character}</li>
         `;
       }
-    });
+    })
 
-    ul.innerHTML = html;
+    phraseOnBoard.innerHTML = html;
+
   }
 
-  checkLetter(letter, button) {
-    if (this.phrase.indexOf(letter) === -1) {
-      button.classList.add('wrong');
-      return false;
-    }
-    else {
-      button.classList.add('chosen');
-      return true;
-    }
+  checkLetter(userButton) {
+    return this.phrase.indexOf(userButton.textContent) === -1 ? false : true;
   }
 
-  showMatchedLetter(letter) {
-    const phraseLetters = document.querySelectorAll('.hide');
-    
-    phraseLetters.forEach(phraseLetter => {
-      if (phraseLetter.textContent === letter) {
-        phraseLetter.classList.replace('hide', 'show');
-        phraseLetter.classList.add('magnify');
+  showMatchedLetter(userLetter) {
+    const lettersOnBoard = phraseOnBoard.querySelectorAll('.hide');
+
+    lettersOnBoard.forEach(letter => {
+      if (letter.textContent === userLetter) {
+        letter.classList.replace('hide', 'show');
+        letter.classList.add('magnify');
       }
     })
+    
   }
 }

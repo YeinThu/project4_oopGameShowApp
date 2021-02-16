@@ -5,9 +5,10 @@
 
 // DOM Elements
 const startGame = document.querySelector('#btn__reset');
+const overlay = document.querySelector('#overlay');
 const qwerty = document.querySelectorAll('#qwerty button');
 const hearts = document.querySelectorAll('#scoreboard img');
-const phrase = document.querySelector('#phrase ul');
+const phraseOnBoard = document.querySelector('#phrase ul');
 
 /* ---------------------------------------------------------------------------------------------------- */
 // Events
