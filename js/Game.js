@@ -24,7 +24,7 @@ class Game {
 
     // Call 'addPhraseToDisplay()'
     this.activePhrase.addPhraseToDisplay();
-    console.log(this.activePhrase);
+
   }
 
   getRandomPhrase() {
@@ -37,7 +37,7 @@ class Game {
 
     // Check Letter Status
     const letterStatus = this.activePhrase.checkLetter(userButton);
-  
+
     // Actions Based On Letter Status
     if (!letterStatus) {
       userButton.classList.add('wrong');
@@ -57,13 +57,14 @@ class Game {
     // Increment Missed Guesses
     this.missed++;
 
-    // Replace Full Hearts With Empty Heart
-    hearts[hearts.length - this.missed].setAttribute('src', '../images/lostHeart.png');
-
-    // Check To See If All Hearts Are Out / Call Game Over
-    if (this.missed >= 5) {
-      this.gameOver('Sory, try again next time!', 'lose');
+    if (this.missed < 5) {
+      const liveHeart = document.querySelector('img[src="images/liveHeart.png"]');
+      liveHeart.setAttribute('src', 'images/lostHeart.png');
     }
+    else {
+      this.gameOver('Sorry, try again next time!', 'lose');
+    }
+
   }
 
   checkForWin() {
@@ -93,11 +94,10 @@ class Game {
       button.className = 'key';
     });
 
-    // Refill Hearts
-    hearts.forEach(heart => heart.setAttribute('src', '../images/liveHeart.png'));
-
-    // Reset Missed Guess To 0
-    this.missed = 0;
-
+    const hearts = document.querySelectorAll('#scoreboard img');
+    for (let i = 0; i < hearts.length; i++) {
+      hearts[i].setAttribute('src', 'images/liveHeart.png');
+    }
   }
 }
+

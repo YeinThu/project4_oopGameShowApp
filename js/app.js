@@ -7,8 +7,8 @@
 const startGame = document.querySelector('#btn__reset');
 const overlay = document.querySelector('#overlay');
 const qwerty = document.querySelectorAll('#qwerty button');
-const hearts = document.querySelectorAll('#scoreboard img');
 const phraseOnBoard = document.querySelector('#phrase ul');
+let game;
 
 /* ---------------------------------------------------------------------------------------------------- */
 // Events
@@ -17,13 +17,12 @@ const phraseOnBoard = document.querySelector('#phrase ul');
 // Start Game
 startGame.addEventListener('click', () => {
   // Instantiate Game Class
-  const game = new Game();
+  game = new Game();
   game.startGame();
 
   // Keys (Click);
   qwerty.forEach(button => {
     button.addEventListener('click', (e) => {
-      // const userGuess = e.target.textContent;
       const userGuess = e.target;
 
       game.handleInteraction(userGuess);
@@ -43,5 +42,7 @@ startGame.addEventListener('click', () => {
   })
   
 });
+
+
 
 

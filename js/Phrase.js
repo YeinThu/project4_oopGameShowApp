@@ -32,7 +32,7 @@ class Phrase {
   }
 
   checkLetter(userButton) {
-    return this.phrase.indexOf(userButton.textContent) === -1 ? false : true;
+    return this.phrase.includes(userButton.textContent) ? true : false;
   }
 
   showMatchedLetter(userLetter) {
