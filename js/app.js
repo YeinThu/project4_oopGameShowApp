@@ -19,29 +19,29 @@ startGame.addEventListener('click', () => {
   // Instantiate Game Class
   game = new Game();
   game.startGame();
-
-  // Keys (Click);
-  qwerty.forEach(button => {
-    button.addEventListener('click', (e) => {
-      const userGuess = e.target;
-
-      game.handleInteraction(userGuess);
-    })
-  })
-
-  // Keys (Keyup)
-  document.addEventListener('keyup', (e) => {
-    const userGuess = e.key;
-
-    qwerty.forEach(button => {
-      if (userGuess === button.textContent && !button.disabled) {
-
-        game.handleInteraction(button);
-      }
-    })
-  })
   
 });
+
+// Keys (Click);
+qwerty.forEach(button => {
+  button.addEventListener('click', (e) => {
+    const userGuess = e.target;
+
+    game.handleInteraction(userGuess);
+  })
+})
+
+// Keys (Keyup)
+document.addEventListener('keyup', (e) => {
+  const userGuess = e.key;
+
+  qwerty.forEach(button => {
+    if (userGuess === button.textContent && !button.disabled) {
+
+      game.handleInteraction(button);
+    }
+  })
+})
 
 
 

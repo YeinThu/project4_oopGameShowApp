@@ -56,7 +56,7 @@ class Game {
   removeLife() {
     // Increment Missed Guesses
     this.missed++;
-
+  
     if (this.missed < 5) {
       const liveHeart = document.querySelector('img[src="images/liveHeart.png"]');
       liveHeart.setAttribute('src', 'images/lostHeart.png');
@@ -98,6 +98,7 @@ class Game {
     for (let i = 0; i < hearts.length; i++) {
       hearts[i].setAttribute('src', 'images/liveHeart.png');
     }
+
   }
 }
 
